@@ -2,6 +2,7 @@
 # boundary tension test
 # Author: Kai Partmann
 # ==========================================================================================
+include("../setup.jl")
 
 using Peridynamics
 using DelimitedFiles

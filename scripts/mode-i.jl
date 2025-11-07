@@ -2,6 +2,7 @@
 # mode-i tension
 # Author: Kai Partmann
 # ==========================================================================================
+include("../setup.jl")
 
 using Peridynamics
 using Printf
