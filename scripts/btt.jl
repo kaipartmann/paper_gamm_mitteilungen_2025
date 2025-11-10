@@ -111,33 +111,39 @@ function main()
     lx = 0.1
     ly = 0.04
     lz = 0.1 * ly
-    npy = 50
+    npy = 80
     ΔX = ly / npy
-    params = (horizon=3.015ΔX, rho=2440, E=72e9, nu=0.25, Gc=150)
+    println("point cloud: $(round(Int,lx/ΔX)) x $(round(Int,ly/ΔX)) x $(round(Int,lz/ΔX))")
+    horizon = 3.015ΔX
+    rho = 2440.0
+    E = 32e9
+    nu = 0.2
+    Gc = 0.75
+    params = (; horizon, rho, E, nu, Gc)
     a = 0.5 * lx
-    time = 1.5e-4
+    time = 0.7e-4
     safety_factor = 0.7
     freq = 10
     fields = (:damage, :displacement,)
-    σ0 = 17e6 # Pa
-    setup = (; lx, ly, lz, npy, ΔX, params, a, σ0, time, safety_factor, freq, fields)
+    σ0 = 1e6 # Pa
+    setup = (; lx, ly, lz, npy, ΔX, a, σ0, time, safety_factor, freq, fields)
 
     #-- material specific setup --#
     mat = BBMaterial{EnergySurfaceCorrection}()
     path = joinpath("out", "btt_BBMaterial")
-    setup_bbmaterial = (; setup..., mat, path)
+    setup_bbmaterial = (; setup..., mat, path, params=(; horizon, rho, E, Gc))
 
     mat = CRMaterial(zem=ZEMSilling())
     path = joinpath("out", "btt_CRMaterial-ZEMSilling")
-    setup_crmaterial_silling = (; setup..., mat, path)
+    setup_crmaterial_silling = (; setup..., mat, path, params)
 
     mat = CRMaterial(zem=ZEMWan())
     path = joinpath("out", "btt_CRMaterial-ZEMWan")
-    setup_crmaterial_wan = (; setup..., mat, path)
+    setup_crmaterial_wan = (; setup..., mat, path, params)
 
-    mat = RKCRMaterial(kernel=const_one_kernel, regfactor=1e-6)
+    mat = RKCRMaterial(kernel=const_one_kernel, lambda=0.005, beta=1e-6)
     path = joinpath("out", "btt_RKCRMaterial")
-    setup_rkcrmaterial = (; setup..., mat, path)
+    setup_rkcrmaterial = (; setup..., mat, path, params)
 
     #-- run the simulations --#
     simulation_btt(setup_bbmaterial)
@@ -145,7 +151,7 @@ function main()
     simulation_btt(setup_crmaterial_wan)
     simulation_btt(setup_rkcrmaterial)
 
-    #-- run the post-processing --#
+    # -- run the post-processing --#
     postprocessing_btt(setup_bbmaterial)
     postprocessing_btt(setup_crmaterial_silling)
     postprocessing_btt(setup_crmaterial_wan)
