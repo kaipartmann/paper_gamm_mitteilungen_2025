@@ -2,11 +2,8 @@
 import Pkg
 Pkg.activate(@__DIR__)
 
-# Install Peridynamics package specified inside the Project.toml
+# Install packages specified inside the Project.toml
 Pkg.instantiate()
 
-# Install specific version of Peridynamics from GitHub
-Pkg.add(Pkg.PackageSpec(name="Peridynamics", rev="rkc_enhancements"))
-
-# Resolve any dependency issues if necessary
-Pkg.resolve()
+# Install specific version of Peridynamics.jl
+Pkg.add(Pkg.PackageSpec(name="Peridynamics", version="0.5.0"))
