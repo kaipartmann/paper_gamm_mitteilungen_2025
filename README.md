@@ -1,5 +1,7 @@
 # Reproducibility Repository for the GAMM-Mitteilungen Paper
 
+[![DOI](https://zenodo.org/badge/1090997503.svg)](https://doi.org/10.5281/zenodo.17569850)
+
 This repository contains all the scripts necessary to reproduce the results shown in the paper
 *"Local continuum consistent peridynamics with bond-associated modeling and dynamic fracture"*,
 which was submitted to GAMM-Mitteilungen.
